@@ -4,6 +4,9 @@ let ampm = false
 let time = ""
 let minutes = 0
 let second = 0
+let x = 0
+let y = 0
+let ms = 0
 input.onButtonPressed(Button.A, function () {
     if (hours < 23) {
         hours += 1
@@ -51,19 +54,33 @@ input.onButtonPressed(Button.B, function () {
     }
 })
 basic.forever(function () {
-    basic.pause(1000)
-    if (second < 59) {
-        second += 1
+    x = input.acceleration(Dimension.X)
+    y = input.acceleration(Dimension.Y)
+    if (Math.abs(x) > 32) {
+        basic.showIcon(IconNames.Sad)
+    } else if (Math.abs(y) > 32) {
+        basic.showIcon(IconNames.Angry)
     } else {
-        second = 0
-        if (minutes < 59) {
-            minutes += 1
+        basic.showIcon(IconNames.Happy)
+    }
+    basic.pause(100)
+    if (ms < 9) {
+        ms += 1
+    } else {
+        ms = 0
+        if (second < 59) {
+            second += 1
         } else {
-            minutes = 0
-            if (hours < 23) {
-                hours += 1
+            second = 0
+            if (minutes < 59) {
+                minutes += 1
             } else {
-                hours = 0
+                minutes = 0
+                if (hours < 23) {
+                    hours += 1
+                } else {
+                    hours = 0
+                }
             }
         }
     }

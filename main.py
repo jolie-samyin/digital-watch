@@ -4,6 +4,9 @@ ampm = False
 time = ""
 minutes = 0
 second = 0
+ms = 0
+x = 0
+y = 0
 
 def on_button_pressed_a():
     global hours
@@ -52,18 +55,32 @@ def on_button_pressed_b():
 input.on_button_pressed(Button.B, on_button_pressed_b)
 
 def on_forever():
-    global second, minutes, hours
-    basic.pause(1000)
-    if second < 59:
-        second += 1
+    global second, minutes, hours, ms, x, y
+    x = input.acceleration(Dimension.X)
+    y = input.acceleration(Dimension.Y)
+    if abs(x) > 32:
+        basic.show_icon(IconNames.SAD)
+    elif abs(y) > 32:
+        basic.show_icon(IconNames.ANGRY)
     else:
-        second = 0
-    if minutes < 59:
-        minutes += 1
+        basic.show_icon(IconNames.HAPPY)
+
+    basic.pause(100)
+    
+    if ms < 10:
+        ms += 1
     else:
-        minutes = 0
-    if hours < 23:
-        hours += 1
-    else:
-        hours = 0
+        ms = 0
+        if second < 59:
+            second += 1
+        else:
+            second = 0
+            if minutes < 59:
+                minutes += 1
+            else:
+                minutes = 0
+                if hours < 23:
+                    hours += 1
+                else:
+                    hours = 0
 basic.forever(on_forever)
